@@ -331,11 +331,11 @@ static void start_vucontrol_cb(void) {
 }
 
 static void start_vumeter_playback_cb(void) {
-    g_spawn_command_line_async("pavumeter --sink", NULL);
+    g_spawn_command_line_async("pavumeter", NULL);
 }
 
 static void start_vumeter_record_cb(void) {
-    g_spawn_command_line_async("pavumeter --source", NULL);
+    g_spawn_command_line_async("pavumeter --record", NULL);
 }
 
 static void show_preferences(void) {
