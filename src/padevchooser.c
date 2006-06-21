@@ -339,8 +339,13 @@ static void start_vumeter_record_cb(void) {
 }
 
 static void show_preferences(void) {
-    GtkWidget *w;
+    GtkWidget *w, *eb;
+    GdkColor white;
 
+    eb = glade_xml_get_widget(glade_xml, "titleEventBox");
+    gdk_color_white(gtk_widget_get_colormap(eb), &white);
+    gtk_widget_modify_bg(eb, GTK_STATE_NORMAL, &white);
+    
     w = glade_xml_get_widget(glade_xml, "preferencesDialog");
     gtk_widget_show_all(w);
     gtk_window_present(GTK_WINDOW(w));
