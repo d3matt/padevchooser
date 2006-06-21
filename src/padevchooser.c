@@ -5,9 +5,9 @@
 #include <gconf/gconf-client.h>
 #include <libnotify/notify.h>
 
-#include <polyp/polypaudio.h>
-#include <polyp/browser.h>
-#include <polyp/glib-mainloop.h>
+#include <pulse/pulseaudio.h>
+#include <pulse/browser.h>
+#include <pulse/glib-mainloop.h>
 
 #include "eggtrayicon.h"
 #include "x11prop.h"
@@ -487,7 +487,7 @@ static EggTrayIcon *create_tray_icon(void) {
     EggTrayIcon *tray_icon;
     GtkWidget *event_box, *icon;
 
-    tray_icon = egg_tray_icon_new("Polypaudio Device Chooser");
+    tray_icon = egg_tray_icon_new("PulseAudio Device Chooser");
 
     event_box = gtk_event_box_new();
     g_signal_connect_swapped(G_OBJECT(event_box), "button-press-event", G_CALLBACK(tray_icon_on_click), NULL);
@@ -499,7 +499,7 @@ static EggTrayIcon *create_tray_icon(void) {
     gtk_widget_show_all(GTK_WIDGET(tray_icon));
 
     tips = gtk_tooltips_new();
-    gtk_tooltips_set_tip(GTK_TOOLTIPS(tips), event_box, "Polypaudio Applet", "I don't know what this is.");
+    gtk_tooltips_set_tip(GTK_TOOLTIPS(tips), event_box, "PulseAudio Applet", "I don't know what this is.");
 
     return tray_icon;
 }
@@ -600,33 +600,33 @@ static void get_x11_props(void) {
     g_free(current_sink);
     g_free(current_source);
 
-    current_server = g_strdup(x11_get_prop(GDK_DISPLAY(), "POLYP_SERVER", t, sizeof(t)));
-    current_sink = g_strdup(x11_get_prop(GDK_DISPLAY(), "POLYP_SINK", t, sizeof(t)));
-    current_source = g_strdup(x11_get_prop(GDK_DISPLAY(), "POLYP_SOURCE", t, sizeof(t)));
+    current_server = g_strdup(x11_get_prop(GDK_DISPLAY(), "PULSE_SERVER", t, sizeof(t)));
+    current_sink = g_strdup(x11_get_prop(GDK_DISPLAY(), "PULSE_SINK", t, sizeof(t)));
+    current_source = g_strdup(x11_get_prop(GDK_DISPLAY(), "PULSE_SOURCE", t, sizeof(t)));
 }
 
 static void set_x11_props(void) {
 
     if (current_server)
-        x11_set_prop(GDK_DISPLAY(), "POLYP_SERVER", current_server);
+        x11_set_prop(GDK_DISPLAY(), "PULSE_SERVER", current_server);
     else
-        x11_del_prop(GDK_DISPLAY(), "POLYP_SERVER");
+        x11_del_prop(GDK_DISPLAY(), "PULSE_SERVER");
 
     if (current_sink)
-        x11_set_prop(GDK_DISPLAY(), "POLYP_SINK", current_sink);
+        x11_set_prop(GDK_DISPLAY(), "PULSE_SINK", current_sink);
     else
-        x11_del_prop(GDK_DISPLAY(), "POLYP_SINK");
+        x11_del_prop(GDK_DISPLAY(), "PULSE_SINK");
 
     if (current_source)
-        x11_set_prop(GDK_DISPLAY(), "POLYP_SOURCE", current_source);
+        x11_set_prop(GDK_DISPLAY(), "PULSE_SOURCE", current_source);
     else
-        x11_del_prop(GDK_DISPLAY(), "POLYP_SOURCE");
+        x11_del_prop(GDK_DISPLAY(), "PULSE_SOURCE");
 
     /* This is used by module-x11-publish to detect whether the
      * properties have been altered. We delete this property here to
      * make sure that the module notices that it is no longer in
      * control */
-    x11_del_prop(GDK_DISPLAY(), "POLYP_ID"); 
+    x11_del_prop(GDK_DISPLAY(), "PULSE_ID"); 
 }
 
 static void check_button_cb(GtkCheckButton *w, const gchar *key) {
@@ -720,7 +720,7 @@ int main(int argc, char *argv[]) {
 
     setup_gconf();
 
-    notify_init("Polypaudio Applet");
+    notify_init("PulseAudio Applet");
 
     get_x11_props();
     
