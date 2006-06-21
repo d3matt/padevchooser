@@ -342,7 +342,7 @@
 			  <property name="spacing">6</property>
 
 			  <child>
-			    <widget class="GtkCheckButton" id="sessionCheckButton">
+			    <widget class="GtkCheckButton" id="loginCheckButton">
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="label" translatable="yes">Start applet on session _login</property>

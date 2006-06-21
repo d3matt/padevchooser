@@ -1,4 +1,33 @@
+/* $Id$ */
+
+/***
+  This file is part of padevchooser.
+ 
+  padevchooser is free software; you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as published
+  by the Free Software Foundation; either version 2 of the License,
+  or (at your option) any later version.
+ 
+  padevchooser is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  General Public License for more details.
+ 
+  You should have received a copy of the GNU Lesser General Public License
+  along with padevchooser; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+  USA.
+***/
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <string.h>
+#include <errno.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include <gtk/gtk.h>
 #include <glade/glade.h>
@@ -634,6 +663,35 @@ static void set_x11_props(void) {
     x11_del_prop(GDK_DISPLAY(), "PULSE_ID"); 
 }
 
+static void start_on_login_cb(GtkCheckButton *w) {
+    gchar *c;
+
+    mkdir(g_get_user_config_dir(), 0777);
+    c = g_build_filename(g_get_user_config_dir(), "autostart", NULL);
+    mkdir(c, 0777);
+    g_free(c);
+    c = g_build_filename(g_get_user_config_dir(), "autostart", "padevchooser.desktop", NULL);
+    
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w))) {
+        if (symlink(DESKTOP_FILE, c) < 0 && errno != EEXIST)
+            g_warning("symlink() failed: %s", strerror(errno));
+    } else {
+        if (unlink(c) < 0 && errno != ENOENT)
+            g_warning("unlink() failed: %s", strerror(errno));
+    }
+
+    g_free(c);
+}
+
+static void init_start_on_login_check_button(GtkToggleButton *w) {
+    struct stat st;
+    gchar *c;
+
+    c = g_build_filename(g_get_user_config_dir(), "autostart", "padevchooser.desktop", NULL);
+    gtk_toggle_button_set_active(w, lstat(c, &st) >= 0);
+    g_free(c);
+}
+
 static void check_button_cb(GtkCheckButton *w, const gchar *key) {
     gboolean b, *ptr;
 
@@ -661,7 +719,7 @@ static void gconf_notify_cb(GConfClient *client, guint cnxn_id, GConfEntry *entr
 }
 
 static void setup_gconf(void) {
-    GtkWidget *server_check_button, *sink_check_button, *source_check_button, *startup_check_button;
+    GtkWidget *server_check_button, *sink_check_button, *source_check_button, *startup_check_button, *start_on_login_check_button;
 
     gconf = gconf_client_get_default();
     g_assert(gconf);
@@ -672,6 +730,7 @@ static void setup_gconf(void) {
     sink_check_button = glade_xml_get_widget(glade_xml, "sinkCheckButton");
     source_check_button = glade_xml_get_widget(glade_xml, "sourceCheckButton");
     startup_check_button = glade_xml_get_widget(glade_xml, "startupCheckButton");
+    start_on_login_check_button = glade_xml_get_widget(glade_xml, "loginCheckButton");
 
     g_object_set_data(G_OBJECT(server_check_button), "ptr", &notify_on_server_discovery);
     g_object_set_data(G_OBJECT(sink_check_button), "ptr", &notify_on_sink_discovery);
@@ -687,7 +746,8 @@ static void setup_gconf(void) {
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(sink_check_button), notify_on_sink_discovery);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(source_check_button), notify_on_source_discovery);
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(startup_check_button), no_notify_on_startup);
-    
+    init_start_on_login_check_button(GTK_TOGGLE_BUTTON(start_on_login_check_button));
+
     gtk_widget_set_sensitive(startup_check_button, notify_on_server_discovery||notify_on_sink_discovery||notify_on_source_discovery);
     
     gconf_client_notify_add(gconf, GCONF_PREFIX"/notify_on_server_discovery", gconf_notify_cb, server_check_button, NULL, NULL);
@@ -699,6 +759,7 @@ static void setup_gconf(void) {
     g_signal_connect(G_OBJECT(sink_check_button), "toggled", G_CALLBACK(check_button_cb), GCONF_PREFIX"/notify_on_sink_discovery");
     g_signal_connect(G_OBJECT(source_check_button), "toggled", G_CALLBACK(check_button_cb), GCONF_PREFIX"/notify_on_source_discovery");
     g_signal_connect(G_OBJECT(startup_check_button), "toggled", G_CALLBACK(check_button_cb), GCONF_PREFIX"/no_notify_on_startup");
+    g_signal_connect(G_OBJECT(start_on_login_check_button), "toggled", G_CALLBACK(start_on_login_cb), NULL);
 }
 
 int main(int argc, char *argv[]) {

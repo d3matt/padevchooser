@@ -29,5 +29,6 @@ padevchooser_SOURCES=padevchooser.c x11prop.c eggtrayicon.c
 padevchooser_LDADD=$(AM_LDADD) $(GUILIBS_LIBS) $(PULSE_LIBS)
 padevchooser_CFLAGS=$(AM_CFLAGS) $(GUILIBS_CFLAGS) $(PULSE_CFLAGS) 
 padevchooser_CFLAGS+=-DGLADE_FILE=\"$(pkgdatadir)/padevchooser.glade\" 
+padevchooser_CFLAGS+=-DDESKTOP_FILE=\"$(desktopdir)/padevchooser.desktop\" 
 padevchooser_CFLAGS+=-DEGG_COMPILATION 
 
