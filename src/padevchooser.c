@@ -704,8 +704,7 @@ int main(int argc, char *argv[]) {
     
     gtk_init(&argc, &argv);
 
-    
-    glade_xml = glade_xml_new("padevchooser.glade", NULL, NULL);
+    glade_xml = glade_xml_new(GLADE_FILE, NULL, NULL);
     g_assert(glade_xml);
 
     m = pa_glib_mainloop_new(NULL);
