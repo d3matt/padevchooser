@@ -24,7 +24,7 @@ bin_PROGRAMS=padevchooser
 dist_pkgdata_DATA=padevchooser.glade
 dist_desktop_DATA=padevchooser.desktop
 
-padevchooser_SOURCES=padevchooser.c x11prop.c eggtrayicon.c
+padevchooser_SOURCES=padevchooser.c x11prop.c eggtrayicon.c x11prop.h eggtrayicon.h
 
 padevchooser_LDADD=$(AM_LDADD) $(GUILIBS_LIBS) $(PULSE_LIBS)
 padevchooser_CFLAGS=$(AM_CFLAGS) $(GUILIBS_CFLAGS) $(PULSE_CFLAGS) 
