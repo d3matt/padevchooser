@@ -79,7 +79,11 @@ source code configuration.</p>
 
 <p><tt>padevchooser</tt> requires GTK 2.4, <tt>libnotify</tt>, GConf installed.</p>
 
-<p>Obviously <tt>padevchooser</tt> requires an installation of <a href="http://pulseaudio.org/">PulseAudio</a> (version 0.9.2).</p>
+<p>Obviously <tt>padevchooser</tt> requires an installation of <a
+href="http://pulseaudio.org/">PulseAudio</a> (version 0.9.2), compiled
+with ZeroConf support. For being discovered correctly PulseAudio
+servers need to load <tt>module-zeroconf-publish</tt> and
+<tt>module-native-protocol-tcp</tt>.</p>
 
 <h2><a name="installation">Installation</a></h2>
 
