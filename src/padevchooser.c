@@ -367,6 +367,10 @@ static void start_vumeter_record_cb(void) {
     g_spawn_command_line_async("pavumeter --record", NULL);
 }
 
+static void start_server_preferences_cb(void) {
+    g_spawn_command_line_async("paprefs", NULL);
+}
+
 static void show_preferences(void) {
     GtkWidget *w, *eb;
     GdkColor white;
@@ -606,12 +610,17 @@ static GtkMenu *create_menu(void) {
 
     item = append_menuitem(menu, "_Volume Meter (Playback)...", NULL);
     gtk_widget_set_sensitive(item, !!(c = g_find_program_in_path("pavumeter")));
-    g_free(c);
     g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(start_vumeter_playback_cb), NULL);
 
     item = append_menuitem(menu, "_Volume Meter (Recording)...", NULL);
     gtk_widget_set_sensitive(item, !!c);
     g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(start_vumeter_record_cb), NULL);
+    g_free(c);
+
+    item = append_menuitem(menu, "_Configure Local Sound Server...", NULL);
+    gtk_widget_set_sensitive(item, !!(c = g_find_program_in_path("paprefs")));
+    g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(start_server_preferences_cb), NULL);
+    g_free(c);
     
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), gtk_separator_menu_item_new());
     item = append_menuitem(menu, "_Preferences...", "gtk-preferences");
