@@ -20,7 +20,7 @@
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
 AC_PREREQ(2.57)
-AC_INIT([padevchooser],[0.9.2],[mzcnqripubbfre (at) 0pointer (dot) de])
+AC_INIT([padevchooser],[0.9.3],[mzcnqripubbfre (at) 0pointer (dot) de])
 AC_CONFIG_SRCDIR([src/padevchooser.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([foreign 1.9 -Wall])
