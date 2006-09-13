@@ -1,0 +1,140 @@
+
+                        PulseAudio Device Chooser 0.9.3
+
+   Copyright 2006 Lennart Poettering <mzcnqripubbfre (at) 0pointer (dot)
+   de>
+     * [1]License
+     * [2]News
+     * [3]Overview
+     * [4]Current Status
+     * [5]Documentation
+     * [6]Requirements
+     * [7]Installation
+     * [8]Acknowledgements
+     * [9]Download
+
+License
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or (at
+   your option) any later version.
+
+   This program is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+   General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+News
+
+   Sat Aug 26 2006:
+
+   [10]Version 0.9.3 released; add menu item for starting the
+   [11]PulseAudio Preferences
+
+   Sat Jul 8 2006:
+
+   [12]Version 0.9.2 released; initial release
+
+Overview
+
+   PulseAudio Device Chooser (padevchooser) is a simple GTK tool which
+   registers an icon in the tray area and allows quick access to some
+   features of the [13]PulseAudio sound server. Specifically it can do
+   for you:
+     * Notify about new sink/sources becoming available on the LAN
+     * Quickly change the default PulseAudio sink/source/server assigned
+       to the current X11 display, selecting devices available on the LAN
+     * Start the auxiliary tools [14]PulseAudio Volume Control,
+       [15]PulseAudio Volume Meter, [16]PulseAudio Manager,
+       [17]PulseAudio Preferences
+
+   Everybody loves [18]screenshots.
+
+Current Status
+
+   Works perfectly.
+
+Documentation
+
+   There is not much to say. Just run padevchooser and see for yourself.
+
+Requirements
+
+   Currently, padevchooser is tested on Linux only.
+
+   padevchooser was developed and tested on Debian GNU/Linux "testing"
+   from June 2006, it should work on most other Linux distributions (and
+   maybe Unix versions) since it uses GNU autoconf for source code
+   configuration.
+
+   padevchooser requires GTK 2.4, libnotify, GConf installed.
+
+   Obviously padevchooser requires an installation of [19]PulseAudio
+   (version 0.9.2), compiled with ZeroConf support. For being discovered
+   correctly PulseAudio servers need to load module-zeroconf-publish and
+   module-native-protocol-tcp.
+
+Installation
+
+   As this package is made with the GNU autotools you should run
+   ./configure inside the distribution directory for configuring the
+   source tree. After that you should run make for compilation and make
+   install (as root) for installation of padevchooser.
+
+Acknowledgements
+
+   None so far.
+
+Download
+
+   The newest release is always available from
+   [20]http://0pointer.de/lennart/projects/padevchooser/
+
+   The current release is [21]0.9.3
+
+   Get padevchooser's development sources from the [22]Subversion
+   [23]repository ([24]viewcvs):
+svn checkout svn://svn.0pointer.net/padevchooser/trunk padevchooser
+
+   If you want to be notified whenever I release a new version of this
+   software use the subscription feature of [25]Freshmeat.
+     _________________________________________________________________
+
+
+    Lennart Poettering <mzcnqripubbfre (at) 0pointer (dot) de>, August
+    2006
+
+   $Id: README.html.in 21 2006-08-26 21:42:34Z lennart $
+
+References
+
+   1. README#license
+   2. README#news
+   3. README#overview
+   4. README#status
+   5. README#documentation
+   6. README#requirements
+   7. README#installation
+   8. README#acks
+   9. README#download
+  10. http://0pointer.de/lennart/projects/padevchooser/padevchooser-0.9.3.tar.gz
+  11. http://0pointer.de/lennart/projects/paprefs/
+  12. http://0pointer.de/lennart/projects/padevchooser/padevchooser-0.9.2.tar.gz
+  13. http://0pointer.de/lennart/projects/pulseaudio/
+  14. http://0pointer.de/lennart/projects/pavucontrol/
+  15. http://0pointer.de/lennart/projects/pavumeter/
+  16. http://0pointer.de/lennart/projects/paman/
+  17. http://0pointer.de/lennart/projects/paprefs/
+  18. http://0pointer.de/lennart/projects/padevchooser//screenshot.png
+  19. http://pulseaudio.org/
+  20. http://0pointer.de/lennart/projects/padevchooser/
+  21. http://0pointer.de/lennart/projects/padevchooser/padevchooser-0.9.3.tar.gz
+  22. http://subversion.tigris.org/
+  23. svn://svn.0pointer.net/padevchooser
+  24. http://0pointer.net/cgi-bin/viewcvs.cgi/?root=padevchooser
+  25. http://freshmeat.net/projects/padevchooser/
