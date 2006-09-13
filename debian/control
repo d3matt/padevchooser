@@ -1,0 +1,22 @@
+Source: padevchooser
+Section: sound
+Priority: optional
+Maintainer: CJ van den Berg <cj@vdbonline.com>
+Build-Depends: debhelper (>= 5), autotools-dev, libpulse-dev, libgtk2.0-dev,
+    libnotify-dev, libgconf2-dev, libglade2-dev, lynx
+Standards-Version: 3.7.2
+
+Package: padevchooser
+Architecture: any
+Depends: ${shlibs:Depends}
+Recommends: pavumeter, pavucontrol, paman, paprefs
+Description: PulseAudio Device Chooser
+ This is a simple GTK tool which registers an icon in the tray area and
+ allows quick access to some features of the PulseAudio sound server.
+ Specifically it can do for you:
+ .
+    * Notify about new sink/sources becoming available on the LAN
+    * Quickly change the default PulseAudio sink/source/server assigned to
+      the current X11 display, selecting devices available on the LAN
+    * Start the auxiliary tools PulseAudio Volume Control, PulseAudio Volume
+      Meter, PulseAudio Manager, PulseAudio Preferences 

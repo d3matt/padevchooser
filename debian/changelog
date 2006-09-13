@@ -1,0 +1,12 @@
+padevchooser (0.9.3-2) unstable; urgency=low
+
+  * rebuild with libpulse0
+
+ -- CJ van den Berg <cj@vdbonline.com>  Thu, 31 Aug 2006 16:54:40 +0200
+
+padevchooser (0.9.3-1) unstable; urgency=low
+
+  * Initial release
+
+ -- CJ van den Berg <cj@vdbonline.com>  Thu, 31 Aug 2006 00:32:17 +0200
+
