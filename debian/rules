@@ -1,6 +1,4 @@
 #!/usr/bin/make -f
-#export DH_VERBOSE=1
-export DH_OPTIONS
 
 DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
@@ -13,9 +11,17 @@ else
 	CFLAGS += -O2
 endif
 
+CONFIGURE_FLAGS = --prefix=/usr CFLAGS="$(CFLAGS)"
+
+ifeq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
+	CONFIGURE_FLAGS += --build=$(DEB_BUILD_GNU_TYPE)
+else
+	CONFIGURE_FLAGS += --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE)
+endif
+
 config.status: configure
 	dh_testdir
-	./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr CFLAGS="$(CFLAGS)"
+	./configure $(CONFIGURE_FLAGS)
 
 build: build-stamp
 
