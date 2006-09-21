@@ -1,2 +1,2 @@
-?package(padevchooser):needs="X11" section="Apps/sound"\
+?package(padevchooser):needs="X11" section="Apps/Sound"\
   title="padevchooser" command="/usr/bin/padevchooser"
