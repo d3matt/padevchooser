@@ -25,3 +25,9 @@ License:
 
 On Debian systems, the complete text of the GNU General
 Public License can be found in `/usr/share/common-licenses/GPL'.
+
+The files src/eggtrayicon.h and src/eggtrayicon.c are Copyright (C) 2002
+Anders Carlsson <andersca@gnu.org> and licensed under the terms of the GNU
+Lesser General Public License. On Debian systems, the complete text of the
+GNU Lesser General Public License can be found in
+`/usr/share/common-licenses/LGPL'.
