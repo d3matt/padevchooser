@@ -19,7 +19,7 @@ else
 	CONFIGURE_FLAGS += --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE)
 endif
 
-config.status: configure
+config.status: patch-stamp configure
 	dh_testdir
 	./configure $(CONFIGURE_FLAGS)
 
@@ -43,6 +43,15 @@ ifneq "$(wildcard /usr/share/misc/config.guess)" ""
 	cp -f /usr/share/misc/config.guess config.guess
 endif
 	dh_clean 
+
+patch: patch-stamp
+patch-stamp:
+	dpatch apply-all
+	touch patch-stamp
+
+unpatch:
+	dpatch deapply-all
+	rm -rf patch-stamp debian/patched
 
 install: build
 	dh_testdir
@@ -69,4 +78,4 @@ binary-arch: build install
 	dh_builddeb
 
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install 
+.PHONY: build clean binary-indep binary-arch binary install patch

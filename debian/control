@@ -2,7 +2,7 @@ Source: padevchooser
 Section: sound
 Priority: optional
 Maintainer: CJ van den Berg <cj@vdbonline.com>
-Build-Depends: debhelper (>= 5), autotools-dev, libpulse-dev, libgtk2.0-dev,
+Build-Depends: debhelper (>= 5), dpatch, autotools-dev, libpulse-dev, libgtk2.0-dev,
     libnotify-dev, libgconf2-dev, libglade2-dev, lynx
 Standards-Version: 3.7.2
 
