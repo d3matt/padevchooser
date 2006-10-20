@@ -1,6 +1,10 @@
 padevchooser (0.9.3-1) unstable; urgency=low
 
+  [ CJ van den Berg ]
   * Initial release
 
- -- CJ van den Berg <cj@vdbonline.com>  Thu, 21 Sep 2006 00:58:30 +0200
+  [ Loic Minier ]
+  * Clarify copyright and licenses mixtures.
+
+ -- Loic Minier <lool@dooz.org>  Fri, 20 Oct 2006 23:56:11 +0200
 
