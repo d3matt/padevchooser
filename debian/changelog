@@ -1,3 +1,9 @@
+padevchooser (0.9.3-2) UNRELEASED; urgency=low
+
+  * Depend on gnome-icon-theme for the icons.
+
+ -- Loic Minier <lool@dooz.org>  Tue, 24 Oct 2006 20:46:31 +0200
+
 padevchooser (0.9.3-1) unstable; urgency=low
 
   [ CJ van den Berg ]
