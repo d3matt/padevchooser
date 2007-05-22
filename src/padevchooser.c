@@ -30,6 +30,7 @@
 #include <sys/types.h>
 
 #include <gtk/gtk.h>
+#include <gdk/gdkx.h>
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
 #include <libnotify/notify.h>
@@ -38,7 +39,6 @@
 #include <pulse/browser.h>
 #include <pulse/glib-mainloop.h>
 
-#include "eggtrayicon.h"
 #include "x11prop.h"
 
 #define GCONF_PREFIX "/apps/padevchooser"
@@ -53,7 +53,7 @@ struct menu_item_info {
 static NotifyNotification *notification = NULL;
 static gchar *last_events = NULL;
 
-static EggTrayIcon *tray_icon = NULL;
+static GtkStatusIcon *tray_icon = NULL;
 static gchar *current_server = NULL, *current_sink = NULL, *current_source = NULL;
 static struct menu_item_info *current_source_menu_item_info = NULL, *current_sink_menu_item_info = NULL, *current_server_menu_item_info = NULL;
 static GtkMenu *menu = NULL, *sink_submenu = NULL, *source_submenu = NULL, *server_submenu = NULL;
@@ -346,9 +346,8 @@ static void browse_cb(pa_browser *z, pa_browse_opcode_t c, const pa_browse_info 
     look_for_current_menu_items();
 }
 
-static void tray_icon_on_click(GtkWidget *widget, GdkEventButton* event) {
-    if (event->type == GDK_BUTTON_PRESS)
-        gtk_menu_popup(menu, NULL, NULL, NULL, NULL, event->button, event->time);
+static void tray_icon_on_click(GtkStatusIcon *status_icon, void * user_data) {
+    gtk_menu_popup(menu, NULL, NULL, gtk_status_icon_position_menu, status_icon, 1, gtk_get_current_event_time());
 }
 
 static void start_manager_cb(void) {
@@ -520,24 +519,15 @@ static void server_other_cb(void) {
     set_server(input_dialog("Other Server", "Please enter server name:", current_server));
 }
 
-static EggTrayIcon *create_tray_icon(void) {
-    GtkTooltips *tips;
-    EggTrayIcon *tray_icon;
-    GtkWidget *event_box, *icon;
+static GtkStatusIcon *create_tray_icon(void) {
+    GtkStatusIcon *tray_icon;
 
-    tray_icon = egg_tray_icon_new("PulseAudio Device Chooser");
-
-    event_box = gtk_event_box_new();
-    g_signal_connect_swapped(G_OBJECT(event_box), "button-press-event", G_CALLBACK(tray_icon_on_click), NULL);
-
-    gtk_container_add(GTK_CONTAINER(tray_icon), event_box);
-    icon = gtk_image_new_from_icon_name("audio-card", GTK_ICON_SIZE_SMALL_TOOLBAR);
-    gtk_container_add(GTK_CONTAINER(event_box), icon);
+    tray_icon = gtk_status_icon_new();
     
-    gtk_widget_show_all(GTK_WIDGET(tray_icon));
-
-    tips = gtk_tooltips_new();
-    gtk_tooltips_set_tip(GTK_TOOLTIPS(tips), event_box, "PulseAudio Applet", "I don't know what this is.");
+    g_signal_connect_object(G_OBJECT(tray_icon), "activate", G_CALLBACK(tray_icon_on_click), tray_icon, 0);
+    gtk_status_icon_set_from_icon_name(tray_icon, "audio-card");
+    gtk_status_icon_set_tooltip(tray_icon, "PulseAudio Applet");
+    gtk_status_icon_set_visible(tray_icon, TRUE);
 
     return tray_icon;
 }
