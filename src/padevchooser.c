@@ -4,7 +4,7 @@
   This file is part of padevchooser.
  
   padevchooser is free software; you can redistribute it and/or modify
-  it under the terms of the GNU Lesser General Public License as published
+  it under the terms of the GNU General Public License as published
   by the Free Software Foundation; either version 2 of the License,
   or (at your option) any later version.
  
@@ -13,7 +13,7 @@
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   General Public License for more details.
  
-  You should have received a copy of the GNU Lesser General Public License
+  You should have received a copy of the GNU General Public License
   along with padevchooser; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
   USA.
@@ -142,6 +142,13 @@ static void menu_item_info_free(struct menu_item_info *i) {
     g_free(i->device);
     g_free(i->description);
     g_free(i);
+
+    if (current_sink_menu_item_info == i)
+        current_sink_menu_item_info = NULL;
+    if (current_source_menu_item_info == i)
+        current_source_menu_item_info = NULL;
+    if (current_server_menu_item_info == i)
+        current_server_menu_item_info = NULL;
 }
 
 static void notification_closed(void) {
@@ -215,7 +222,7 @@ static struct menu_item_info* add_menu_item_info(GHashTable *h, GtkMenu *menu, c
     gboolean b;
     
     m = g_new(struct menu_item_info, 1);
-
+    
     m->name = g_strdup(i->name);
     m->server = g_strdup(i->server);
     m->device = g_strdup(i->device);
@@ -322,7 +329,7 @@ static void browse_cb(pa_browser *z, pa_browse_opcode_t c, const pa_browse_info 
             break;
             
         case PA_BROWSE_NEW_SINK:
-                add_menu_item_info(sink_hash_table, sink_submenu, i, (GCallback) sink_change_cb);
+            add_menu_item_info(sink_hash_table, sink_submenu, i, (GCallback) sink_change_cb);
             break;
             
         case PA_BROWSE_NEW_SOURCE:
