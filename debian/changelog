@@ -5,8 +5,9 @@ padevchooser (0.9.3-2) UNRELEASED; urgency=low
 
   [ CJ van den Berg ]
   * debian/rules: Port to CDBS and quilt.
+  * debian/patches: Reformat patch series to work with quilt.
 
- -- CJ van den Berg <cj@vdbonline.com>  Sun, 27 May 2007 11:14:34 +0200
+ -- CJ van den Berg <cj@vdbonline.com>  Sun, 27 May 2007 11:17:07 +0200
 
 padevchooser (0.9.3-1) unstable; urgency=low
 

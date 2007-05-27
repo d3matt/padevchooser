@@ -1,15 +1,20 @@
-#! /bin/sh /usr/share/dpatch/dpatch-run
-## 01_use_stock_g2.14_icons.dpatch by CJ van den Berg <cj@vdbonline.com>
-##
-## All lines beginning with `## DP:' are a description of the patch.
-## DP: use stock GNOME 2.14 icons (instead of GNOME 2.16)
+Use stock Gnome icons (instead of Tango icons)
 
-@DPATCH@
+From: CJ van den Berg <cj@vdbonline.com>
 
-diff -Nru padevchooser-0.9.3-orig/src/padevchooser.c padevchooser-0.9.3/src/padevchooser.c
---- padevchooser-0.9.3-orig/src/padevchooser.c	2006-07-27 20:27:12.000000000 +0200
-+++ padevchooser-0.9.3/src/padevchooser.c	2006-10-06 14:52:24.101052567 +0200
-@@ -162,13 +162,13 @@
+
+---
+
+ src/padevchooser.c       |   14 +++++++-------
+ src/padevchooser.desktop |    2 +-
+ src/padevchooser.glade   |    2 +-
+ 3 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/src/padevchooser.c b/src/padevchooser.c
+index 89db697..c0425d7 100644
+--- a/src/padevchooser.c
++++ b/src/padevchooser.c
+@@ -162,13 +162,13 @@ static void notify_event(const char *title, const char*text) {
          
      if (!notification) {
          s = g_strdup_printf("<i>%s</i>\n%s", title, text);
@@ -25,7 +30,7 @@ diff -Nru padevchooser-0.9.3-orig/src/padevchooser.c padevchooser-0.9.3/src/pade
      }
      
      g_free(last_events);
-@@ -531,7 +531,7 @@
+@@ -531,7 +531,7 @@ static EggTrayIcon *create_tray_icon(void) {
      g_signal_connect_swapped(G_OBJECT(event_box), "button-press-event", G_CALLBACK(tray_icon_on_click), NULL);
  
      gtk_container_add(GTK_CONTAINER(tray_icon), event_box);
@@ -34,7 +39,7 @@ diff -Nru padevchooser-0.9.3-orig/src/padevchooser.c padevchooser-0.9.3/src/pade
      gtk_container_add(GTK_CONTAINER(event_box), icon);
      
      gtk_widget_show_all(GTK_WIDGET(tray_icon));
-@@ -593,9 +593,9 @@
+@@ -593,9 +593,9 @@ static GtkMenu *create_menu(void) {
      append_default_device_menu_items(source_submenu, &no_sources_menu_item, &default_source_menu_item, &other_source_menu_item, source_default_cb, source_other_cb);
      append_default_device_menu_items(server_submenu, &no_servers_menu_item, &default_server_menu_item, &other_server_menu_item, server_default_cb, server_other_cb);
  
@@ -47,7 +52,7 @@ diff -Nru padevchooser-0.9.3-orig/src/padevchooser.c padevchooser-0.9.3/src/pade
      gtk_menu_shell_append(GTK_MENU_SHELL(menu), gtk_separator_menu_item_new());
      
      item = append_menuitem(menu, "_Manager...", NULL);
-@@ -603,7 +603,7 @@
+@@ -603,7 +603,7 @@ static GtkMenu *create_menu(void) {
      g_free(c);
      g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(start_manager_cb), NULL);
      
@@ -56,10 +61,11 @@ diff -Nru padevchooser-0.9.3-orig/src/padevchooser.c padevchooser-0.9.3/src/pade
      gtk_widget_set_sensitive(item, !!(c = g_find_program_in_path("pavucontrol")));
      g_free(c);
      g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(start_vucontrol_cb), NULL);
-diff -Nru padevchooser-0.9.3-orig/src/padevchooser.desktop padevchooser-0.9.3/src/padevchooser.desktop
---- padevchooser-0.9.3-orig/src/padevchooser.desktop	2006-06-21 12:55:36.000000000 +0200
-+++ padevchooser-0.9.3/src/padevchooser.desktop	2006-10-06 14:43:20.948977227 +0200
-@@ -5,7 +5,7 @@
+diff --git a/src/padevchooser.desktop b/src/padevchooser.desktop
+index d2abca1..6d4aad0 100644
+--- a/src/padevchooser.desktop
++++ b/src/padevchooser.desktop
+@@ -5,7 +5,7 @@ Name=PulseAudio Device Chooser
  GenericName=Device Chooser
  Comment=An Applet for Quick Device Changing
  Exec=padevchooser
@@ -68,9 +74,10 @@ diff -Nru padevchooser-0.9.3-orig/src/padevchooser.desktop padevchooser-0.9.3/sr
  StartupNotify=true
  Type=Application
  Categories=Application;AudioVideo;Audio;
-diff -Nru padevchooser-0.9.3-orig/src/padevchooser.glade padevchooser-0.9.3/src/padevchooser.glade
---- padevchooser-0.9.3-orig/src/padevchooser.glade	2006-06-21 15:41:01.000000000 +0200
-+++ padevchooser-0.9.3/src/padevchooser.glade	2006-10-06 14:43:30.378228472 +0200
+diff --git a/src/padevchooser.glade b/src/padevchooser.glade
+index 11c4ada..1da559a 100644
+--- a/src/padevchooser.glade
++++ b/src/padevchooser.glade
 @@ -76,7 +76,7 @@
  		    <widget class="GtkImage" id="image1">
  		      <property name="visible">True</property>
