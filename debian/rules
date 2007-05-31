@@ -3,3 +3,10 @@
 include /usr/share/cdbs/1/rules/debhelper.mk
 include /usr/share/cdbs/1/class/autotools.mk
 include /usr/share/cdbs/1/rules/patchsys-quilt.mk
+
+common-build-arch:: $(CURDIR)/debian/padevchooser.1.txt
+	a2x -d manpage -f manpage $(CURDIR)/debian/padevchooser.1.txt
+
+clean::
+	rm -f $(CURDIR)/debian/padevchooser.1.xml
+	rm -f $(CURDIR)/debian/padevchooser.1

@@ -3,7 +3,8 @@ Section: sound
 Priority: optional
 Maintainer: CJ van den Berg <cj@vdbonline.com>
 Build-Depends: debhelper (>= 5), cdbs, quilt, autotools-dev, libpulse-dev,
-    libgtk2.0-dev, libnotify-dev, libgconf2-dev, libglade2-dev, lynx
+    libgtk2.0-dev, libnotify-dev, libgconf2-dev, libglade2-dev, lynx,
+    asciidoc, xmlto
 Standards-Version: 3.7.2
 
 Package: padevchooser
