@@ -532,6 +532,7 @@ static GtkStatusIcon *create_tray_icon(void) {
     tray_icon = gtk_status_icon_new();
     
     g_signal_connect_object(G_OBJECT(tray_icon), "activate", G_CALLBACK(tray_icon_on_click), tray_icon, 0);
+    g_signal_connect_object(G_OBJECT(tray_icon), "popup-menu", G_CALLBACK(tray_icon_on_click), tray_icon, 0);
     gtk_status_icon_set_from_icon_name(tray_icon, "audio-card");
     gtk_status_icon_set_tooltip(tray_icon, "PulseAudio Applet");
     gtk_status_icon_set_visible(tray_icon, TRUE);
