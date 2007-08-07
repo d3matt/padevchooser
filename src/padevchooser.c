@@ -33,6 +33,8 @@
 #include <gdk/gdkx.h>
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
+#include <libgnome/gnome-desktop-item.h>
+#include <libgnomeui/gnome-ui-init.h>
 #include <libnotify/notify.h>
 
 #include <pulse/pulseaudio.h>
@@ -357,24 +359,52 @@ static void tray_icon_on_click(GtkStatusIcon *status_icon, void * user_data) {
     gtk_menu_popup(menu, NULL, NULL, gtk_status_icon_position_menu, status_icon, 1, gtk_get_current_event_time());
 }
 
+static void run(const char *name) {
+    GnomeDesktopItem* di;
+    char *p;
+
+    p = g_strdup_printf(DESKTOP_DIR "/%s.desktop", name);
+    di = gnome_desktop_item_new_from_file(p, GNOME_DESKTOP_ITEM_LOAD_ONLY_IF_EXISTS, NULL);
+
+    if (di) {
+        if (gnome_desktop_item_launch(di, NULL, 0, NULL)) {
+            gnome_desktop_item_unref(di);
+            g_free(p);
+            return;
+        }
+    }
+
+    g_message("Failed to launch desktop item '%s'.", di ? gnome_desktop_item_get_location(di) : p);
+
+    if (di)
+        gnome_desktop_item_unref(di);
+
+    g_free(p);
+    
+    if (strcmp(name, "pavumeter-record") == 0)
+        g_spawn_command_line_async("pavumeter --record", NULL);
+    else
+        g_spawn_command_line_async(name, NULL);
+}
+
 static void start_manager_cb(void) {
-    g_spawn_command_line_async("paman", NULL);
+    run("paman");
 }
 
 static void start_vucontrol_cb(void) {
-    g_spawn_command_line_async("pavucontrol", NULL);
+    run("pavucontrol");
 }
 
 static void start_vumeter_playback_cb(void) {
-    g_spawn_command_line_async("pavumeter", NULL);
+    run("pavumeter");
 }
 
 static void start_vumeter_record_cb(void) {
-    g_spawn_command_line_async("pavumeter --record", NULL);
+    run("pavumeter-record");
 }
 
 static void start_server_preferences_cb(void) {
-    g_spawn_command_line_async("paprefs", NULL);
+    run("paprefs");
 }
 
 static void show_preferences(void) {
@@ -772,11 +802,15 @@ static void setup_gconf(void) {
 int main(int argc, char *argv[]) {
     pa_browser *b = NULL;
     pa_glib_mainloop *m = NULL;
+    GnomeProgram *program;
 
     startup_time = time(NULL);
-    
-    gtk_init(&argc, &argv);
 
+    program = gnome_program_init("padevchoose", VERSION,
+                                 LIBGNOMEUI_MODULE,
+                                 argc, argv,
+                                 NULL);
+    
     glade_xml = glade_xml_new(GLADE_FILE, NULL, NULL);
     g_assert(glade_xml);
 
@@ -825,6 +859,9 @@ fail:
         g_object_unref(G_OBJECT(notification));
 
     g_free(last_events);
+
+    if (program)
+        g_object_unref(program);
     
     return 0;
 }

@@ -30,5 +30,5 @@ padevchooser_LDADD=$(AM_LDADD) $(GUILIBS_LIBS) $(PULSE_LIBS)
 padevchooser_CFLAGS=$(AM_CFLAGS) $(GUILIBS_CFLAGS) $(PULSE_CFLAGS) 
 padevchooser_CFLAGS+=-DGLADE_FILE=\"$(pkgdatadir)/padevchooser.glade\" 
 padevchooser_CFLAGS+=-DDESKTOP_FILE=\"$(desktopdir)/padevchooser.desktop\" 
-padevchooser_CFLAGS+=-DEGG_COMPILATION 
+padevchooser_CFLAGS+=-DDESKTOP_DIR=\"$(desktopdir)\"
 
