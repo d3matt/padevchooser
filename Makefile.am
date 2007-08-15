@@ -36,6 +36,6 @@ homepage: all dist
 	ln -sf README.html $$HOME/homepage/private/projects/padevchooser/index.html
 
 fedora-snapshot: dist
-	cp $(distdir).tar.gz $$HOME/cvs.fedora/paprefs/devel/$(distdir).svn`date +%Y%m%d`.tar.gz
+	cp $(distdir).tar.gz $$HOME/cvs.fedora/padevchooser/devel/$(distdir).svn`date +%Y%m%d`.tar.gz
 
 .PHONY: homepage
