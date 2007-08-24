@@ -356,7 +356,7 @@ static void browse_cb(pa_browser *z, pa_browse_opcode_t c, const pa_browse_info 
 }
 
 static void tray_icon_on_click(GtkStatusIcon *status_icon, void * user_data) {
-    gtk_menu_popup(menu, NULL, NULL, gtk_status_icon_position_menu, status_icon, 1, gtk_get_current_event_time());
+    gtk_menu_popup(menu, NULL, NULL, gtk_status_icon_position_menu, status_icon, 0, gtk_get_current_event_time());
 }
 
 static void run(const char *name) {
