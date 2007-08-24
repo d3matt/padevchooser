@@ -171,7 +171,7 @@ static void notify_event(const char *title, const char*text) {
         
     if (!notification) {
         s = g_strdup_printf("<i>%s</i>\n%s", title, text);
-        notification = notify_notification_new(title, s, "audio-card", GTK_WIDGET(tray_icon));
+        notification = notify_notification_new_with_status_icon(title, s, "audio-card", tray_icon);
         notify_notification_set_category(notification, "device.added");
         notify_notification_set_urgency(notification, NOTIFY_URGENCY_LOW);
         g_signal_connect_swapped(G_OBJECT(notification), "closed", G_CALLBACK(notification_closed), NULL);
