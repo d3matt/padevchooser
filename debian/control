@@ -9,7 +9,7 @@ Standards-Version: 3.7.2
 
 Package: padevchooser
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, gnome-icon-theme
+Depends: avahi-daemon, ${shlibs:Depends}, ${misc:Depends}, gnome-icon-theme
 Recommends: pavumeter, pavucontrol, paman, paprefs
 Description: PulseAudio Device Chooser
  PulseAudio, previously known as Polypaudio, is a sound server for POSIX and

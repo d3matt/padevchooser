@@ -8,8 +8,10 @@ padevchooser (0.9.3-2) UNRELEASED; urgency=low
   * debian/patches: Reformat patch series to work with quilt.
   * debian/copyright: Update FSF postal address.
   * debian/padevchooser.1.txt: Add a simple man page.
+  * debian/control: Depend on avahi-daemon to ensure that the avahi daemon is
+      running. (Closes: #440333)
 
- -- CJ van den Berg <cj@vdbonline.com>  Wed, 30 May 2007 16:50:36 +0200
+ -- CJ van den Berg <cj@vdbonline.com>  Sun, 02 Sep 2007 20:13:20 +0200
 
 padevchooser (0.9.3-1) unstable; urgency=low
 
