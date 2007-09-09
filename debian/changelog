@@ -1,4 +1,4 @@
-padevchooser (0.9.3-2) UNRELEASED; urgency=low
+padevchooser (0.9.3-2) unstable; urgency=low
 
   [ Loic Minier ]
   * Depend on gnome-icon-theme for the icons.
