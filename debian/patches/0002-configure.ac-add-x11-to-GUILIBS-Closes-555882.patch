@@ -1,0 +1,25 @@
+From f5700bb3757308376bbe59e48d9282098707efab Mon Sep 17 00:00:00 2001
+From: Philipp Kern <phil@philkern.de>
+Date: Thu, 5 May 2011 22:28:59 +0200
+Subject: [PATCH 2/8] configure.ac: add x11 to GUILIBS (Closes: #555882)
+
+---
+ configure.ac |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index ca07c53..d14c15e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -34,7 +34,7 @@ AC_PROG_LN_S
+ AC_TYPE_SIGNAL
+ AC_HEADER_STDC
+ 
+-PKG_CHECK_MODULES(GUILIBS, [ gtk+-2.0 libnotify libglade-2.0 gconf-2.0 ])
++PKG_CHECK_MODULES(GUILIBS, [ gtk+-2.0 libnotify libglade-2.0 gconf-2.0 x11 ])
+ AC_SUBST(GUILIBS_CFLAGS)
+ AC_SUBST(GUILIBS_LIBS)
+ 
+-- 
+1.7.4.4
+

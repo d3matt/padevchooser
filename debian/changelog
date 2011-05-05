@@ -1,3 +1,14 @@
+padevchooser (0.9.3-2.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * configure.ac: add x11 to GUILIBS (Closes: #555882)
+  * configure.ac: fix build breakage with GNU stow installed
+  * Re-autotoolize to pick up changes in configure.ac
+  * use_stock_gnome_icons.patch: dropped (Closes: #580771)
+  * debian/menu: use Applications section
+
+ -- Philipp Kern <pkern@debian.org>  Thu, 05 May 2011 22:32:09 +0200
+
 padevchooser (0.9.3-2) unstable; urgency=low
 
   [ Loic Minier ]
