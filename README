@@ -1,0 +1,5 @@
+This is a clone of git://git.0pointer.de/padevchooser.git
+
+I've add a few pieces from pulse-audio that I need to be able to build.  The
+main piece is browser.c.  Everything in pulse-core was added to be able to
+build browser.c
