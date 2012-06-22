@@ -17,16 +17,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA.
 
-EXTRA_DIST = bootstrap.sh README LICENSE
+EXTRA_DIST = bootstrap.sh LICENSE
 SUBDIRS=src doc
-
-MAINTAINERCLEANFILES=README
-noinst_DATA = README
-
-README:
-	rm -f README
-	$(MAKE) -C doc README
-	cd $(srcdir) && ln -s doc/README README
 
 homepage: all dist
 	test -d $$HOME/homepage/private
