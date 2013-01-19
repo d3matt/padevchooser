@@ -60,6 +60,17 @@ struct pa_browser {
 
 };
 
+
+int atou(const char* str, unsigned *out)
+{
+    int tmp;
+    tmp=atoi(str);
+    if(tmp < 0)
+        return -1;
+    *out=tmp;
+    return 0;
+}
+
 static int map_to_opcode(const char *type, int new) {
 
     if (avahi_domain_equal(type, SERVICE_TYPE_SINK))
@@ -113,10 +124,10 @@ static void resolve_callback(
     pa_assert(opcode >= 0);
 
     if (aa->proto == AVAHI_PROTO_INET)
-        pa_snprintf(a, sizeof(a), "tcp:%s:%u", avahi_address_snprint(ip, sizeof(ip), aa), port);
+        snprintf(a, sizeof(a), "tcp:%s:%u", avahi_address_snprint(ip, sizeof(ip), aa), port);
     else {
         pa_assert(aa->proto == AVAHI_PROTO_INET6);
-        pa_snprintf(a, sizeof(a), "tcp6:%s:%u", avahi_address_snprint(ip, sizeof(ip), aa), port);
+        snprintf(a, sizeof(a), "tcp6:%s:%u", avahi_address_snprint(ip, sizeof(ip), aa), port);
     }
     i.server = a;
 
@@ -152,7 +163,7 @@ static void resolve_callback(
             strncat(a, i.fqdn, sizeof(a)-l-2);
         } else if (!strcmp(key, "cookie")) {
 
-            if (pa_atou(value, &cookie) < 0)
+            if (atou(value, &cookie) < 0)
                 goto fail;
 
             i.cookie = &cookie;
@@ -163,14 +174,14 @@ static void resolve_callback(
         } else if (!strcmp(key, "channels")) {
             uint32_t ch;
 
-            if (pa_atou(value, &ch) < 0 || ch <= 0 || ch > 255)
+            if (atou(value, &ch) < 0 || ch <= 0 || ch > 255)
                 goto fail;
 
             ss.channels = (uint8_t) ch;
             ss_valid |= 1;
 
         } else if (!strcmp(key, "rate")) {
-            if (pa_atou(value, &ss.rate) < 0)
+            if (atou(value, &ss.rate) < 0)
                 goto fail;
             ss_valid |= 2;
         } else if (!strcmp(key, "format")) {
