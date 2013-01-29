@@ -1,3 +1,3 @@
-0001-configure.ac-fix-build-breakage-with-GNU-stow-instal.patch
-0002-configure.ac-add-x11-to-GUILIBS-Closes-555882.patch
-0004-Re-autotoolize-to-pick-up-changes-in-configure.ac.patch
+0001-configure.ac-add-x11-to-GUILIBS-Closes-555882.patch
+0002-configure.ac-update.patch
+0003-src-padevchooser.desktop-remove-encoding-key.patch

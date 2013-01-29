@@ -1,11 +1,15 @@
 Source: padevchooser
 Section: sound
 Priority: optional
-Maintainer: CJ van den Berg <cj@vdbonline.com>
-Build-Depends: debhelper (>= 5), cdbs, quilt, autotools-dev, libpulse-dev,
-    libgtk2.0-dev, libnotify-dev, libgconf2-dev, libglade2-dev, lynx,
-    asciidoc, xmlto
-Standards-Version: 3.7.2
+Maintainer: Barak A. Pearlmutter <bap@debian.org>
+Build-Depends: debhelper (>= 9),
+	dh-autoreconf,
+	libpulse-dev,
+	libgtk2.0-dev, libnotify-dev, libgconf2-dev, libglade2-dev,
+	libgnome-desktop-dev,
+	lynx, asciidoc, xmlto
+Standards-Version: 3.9.4
+Vcs-Git: git://anonscm.debian.org/pkg-pulseaudio/padevchooser.git
 
 Package: padevchooser
 Architecture: any

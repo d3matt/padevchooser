@@ -5,42 +5,18 @@ It was downloaded from http://0pointer.de/lennart/projects/padevchooser/
 
 Upstream Author: Lennart Poettering <mzcnihpbageby@0pointer.de>
 
+Relevant repositories:
+ git://git.0pointer.de/padevchooser.git (last commit 2007)
+ git://github.com/d3matt/padevchooser (forked from above with updates)
+
+The current package is based on the tip of the latter.
+
 Copyrights:
     Most files are Copyright 2006 Lennart Poettering
     src/eggtrayicon.h and .c are:
        Copyright (C) 2002 Anders Carlsson <andersca@gnu.org>
 
 License:
-
- The packages should end up being 100% GPL, but for now it is a mixture
- of LGPL and GPL sources.
-
- src/eggtrayicon.c and .h are licensed under the LGPL version 2 or
- later; this is not expected to change until this support is added to a
- library.
-   Other *.c and *.h files under src/ are licensed under the LGPL version
- 2 or later as well; this is expected to be relicensed to the GPL
- soonish; doc/style.css is also under the LGPL:
-  padevchooser is free software; you can redistribute it and/or modify
-  it under the terms of the GNU Lesser General Public License as published
-  by the Free Software Foundation; either version 2 of the License,
-  or (at your option) any later version.
- 
-  padevchooser is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-  General Public License for more details.
- 
-  You should have received a copy of the GNU Lesser General Public License
-  along with padevchooser; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301,
-  USA.
-
-On Debian systems, the complete text of the GNU Lesser General
-Public License can be found in `/usr/share/common-licenses/LGPL'.
-
- And when not otherwise stated other files are licensed under the GPL
- version 2 or later:
 
    This package is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -53,8 +29,7 @@ Public License can be found in `/usr/share/common-licenses/LGPL'.
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this package; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+   along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-On Debian systems, the complete text of the GNU General
-Public License can be found in `/usr/share/common-licenses/GPL'.
+On Debian systems, the complete text of the GNU General Public License
+version 2 can be found in `/usr/share/common-licenses/GPL-2'.

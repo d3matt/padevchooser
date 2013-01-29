@@ -1,0 +1,20 @@
+From: "Barak A. Pearlmutter" <barak+git@cs.nuim.ie>
+Date: Tue, 29 Jan 2013 23:41:50 +0000
+Subject: src/padevchooser.desktop: remove encoding key
+
+remove obsolete encoding key line from desktop file, per lintian
+---
+ src/padevchooser.desktop |    1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/padevchooser.desktop b/src/padevchooser.desktop
+index d2abca1..cf8cefe 100644
+--- a/src/padevchooser.desktop
++++ b/src/padevchooser.desktop
+@@ -1,6 +1,5 @@
+ [Desktop Entry]
+ Version=1.0
+-Encoding=UTF-8
+ Name=PulseAudio Device Chooser
+ GenericName=Device Chooser
+ Comment=An Applet for Quick Device Changing

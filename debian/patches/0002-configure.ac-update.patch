@@ -1,0 +1,36 @@
+From: "Barak A. Pearlmutter" <barak+git@cs.nuim.ie>
+Date: Tue, 29 Jan 2013 23:23:57 +0000
+Subject: configure.ac: update
+
+follow automake's instructions:
+
+src/Makefile.am:27: compiling `padevchooser.c' with per-target flags requires `AM_PROG_CC_C_O' in `configure.ac'
+
+autoupdate says AC_TYPE_SIGNAL in configure.ac is obsolete
+---
+ configure.ac |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 773b642..ee9a473 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -19,7 +19,7 @@
+ # along with padevchooser; if not, write to the Free Software Foundation,
+ # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+ 
+-AC_PREREQ(2.57)
++AC_PREREQ([2.69])
+ AC_INIT([padevchooser],[0.9.4],[mzcnqripubbfre (at) 0pointer (dot) de])
+ AC_CONFIG_SRCDIR([src/padevchooser.c])
+ AC_CONFIG_HEADERS([config.h])
+@@ -36,8 +36,8 @@ fi
+ AC_PROG_CXX
+ AC_PROG_CC
+ AC_PROG_LN_S
+-AC_TYPE_SIGNAL
+ AC_HEADER_STDC
++AM_PROG_CC_C_O
+ 
+ PKG_CHECK_MODULES(GUILIBS, [ gtk+-2.0 >= 2.10 libnotify libglade-2.0 gconf-2.0 libgnomeui-2.0 gnome-desktop-2.0 x11 ])
+ AC_SUBST(GUILIBS_CFLAGS)

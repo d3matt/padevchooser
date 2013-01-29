@@ -1,12 +1,10 @@
 #!/usr/bin/make -f
 
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/autotools.mk
-include /usr/share/cdbs/1/rules/patchsys-quilt.mk
+%:
+	dh $@ --with autoreconf --parallel
 
-common-build-arch:: $(CURDIR)/debian/padevchooser.1.txt
-	a2x -d manpage -f manpage $(CURDIR)/debian/padevchooser.1.txt
+%.1: %.1.txt
+	a2x -d manpage -f manpage $<
 
-clean::
-	rm -f $(CURDIR)/debian/padevchooser.1.xml
-	rm -f $(CURDIR)/debian/padevchooser.1
+override_dh_installman: debian/padevchooser.1
+	dh_installman
