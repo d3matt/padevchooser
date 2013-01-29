@@ -19,7 +19,7 @@
 # along with padevchooser; if not, write to the Free Software Foundation,
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
-AC_PREREQ(2.57)
+AC_PREREQ([2.69])
 AC_INIT([padevchooser],[0.9.4],[mzcnqripubbfre (at) 0pointer (dot) de])
 AC_CONFIG_SRCDIR([src/padevchooser.c])
 AC_CONFIG_HEADERS([config.h])
@@ -36,8 +36,8 @@ fi
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_LN_S
-AC_TYPE_SIGNAL
 AC_HEADER_STDC
+AM_PROG_CC_C_O
 
 PKG_CHECK_MODULES(GUILIBS, [ gtk+-2.0 >= 2.10 libnotify libglade-2.0 gconf-2.0 libgnomeui-2.0 gnome-desktop-2.0 x11 ])
 AC_SUBST(GUILIBS_CFLAGS)
