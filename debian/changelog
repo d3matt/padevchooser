@@ -1,3 +1,12 @@
+padevchooser (0.9.4-1) unstable; urgency=low
+
+  * New upstream version
+  * New Debian maintainer (closes: #636424)
+  * Update and forward-port debian packaging
+  * Bring out your dead!  (closes: #636151)
+
+ -- Barak A. Pearlmutter <bap@debian.org>  Tue, 29 Jan 2013 23:35:50 +0000
+
 padevchooser (0.9.3-2.1) unstable; urgency=low
 
   * Non-maintainer upload.
