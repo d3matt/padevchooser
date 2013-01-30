@@ -9,6 +9,7 @@ Build-Depends: debhelper (>= 9),
 	libgnome-desktop-dev,
 	lynx, asciidoc, xmlto
 Standards-Version: 3.9.4
+Homepage: https://github.com/d3matt/padevchooser
 Vcs-Git: git://anonscm.debian.org/pkg-pulseaudio/padevchooser.git
 
 Package: padevchooser
