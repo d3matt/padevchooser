@@ -114,7 +114,7 @@ compilation and <tt>make install</tt> (as root) for installation of
 
 <hr/>
 <address class="grey">Lennart Poettering &lt;@PACKAGE_BUGREPORT@&gt;, August 2006</address>
-<div class="grey"><i>$Id: README.html.in 21 2006-08-26 21:42:34Z lennart $</i></div>
+<div class="grey"><i>$Id$</i></div>
 
 </body>
 </html>

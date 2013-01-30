@@ -1,4 +1,4 @@
-# $Id: Makefile.am 8 2006-06-21 11:05:28Z lennart $
+# $Id$
 
 # This file is part of padevchooser.
 #

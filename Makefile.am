@@ -1,4 +1,4 @@
-# $Id: Makefile.am 8 2006-06-21 11:05:28Z lennart $
+# $Id$
 #
 # This file is part of padevchooser.
 #
@@ -17,16 +17,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA.
 
-EXTRA_DIST = bootstrap.sh README LICENSE
+EXTRA_DIST = bootstrap.sh LICENSE
 SUBDIRS=src doc
-
-MAINTAINERCLEANFILES=README
-noinst_DATA = README
-
-README:
-	rm -f README
-	$(MAKE) -C doc README
-	cd $(srcdir) && ln -s doc/README README
 
 homepage: all dist
 	test -d $$HOME/homepage/private
@@ -34,5 +26,8 @@ homepage: all dist
 	cp padevchooser-@PACKAGE_VERSION@.tar.gz $$HOME/homepage/private/projects/padevchooser
 	cp doc/README.html doc/screenshot.png doc/style.css $$HOME/homepage/private/projects/padevchooser
 	ln -sf README.html $$HOME/homepage/private/projects/padevchooser/index.html
+
+fedora-snapshot: dist
+	cp $(distdir).tar.gz $$HOME/cvs.fedora/padevchooser/devel/$(distdir).svn`date +%Y%m%d`.tar.gz
 
 .PHONY: homepage

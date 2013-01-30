@@ -1,19 +1,19 @@
-/* $Id: padevchooser.c 20 2006-07-27 18:27:16Z lennart $ */
+/* $Id$ */
 
 /***
   This file is part of padevchooser.
- 
+
   padevchooser is free software; you can redistribute it and/or modify
-  it under the terms of the GNU Lesser General Public License as published
+  it under the terms of the GNU General Public License as published
   by the Free Software Foundation; either version 2 of the License,
   or (at your option) any later version.
- 
+
   padevchooser is distributed in the hope that it will be useful, but
   WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
   General Public License for more details.
- 
-  You should have received a copy of the GNU Lesser General Public License
+
+  You should have received a copy of the GNU General Public License
   along with padevchooser; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
   USA.
@@ -30,16 +30,18 @@
 #include <sys/types.h>
 
 #include <gtk/gtk.h>
+#include <gdk/gdkx.h>
 #include <glade/glade.h>
 #include <gconf/gconf-client.h>
+#include <libgnome/gnome-desktop-item.h>
+#include <libgnomeui/gnome-ui-init.h>
 #include <libnotify/notify.h>
 
 #include <pulse/pulseaudio.h>
-#include <pulse/browser.h>
 #include <pulse/glib-mainloop.h>
 
-#include "eggtrayicon.h"
 #include "x11prop.h"
+#include "browser.h"
 
 #define GCONF_PREFIX "/apps/padevchooser"
 
@@ -53,7 +55,7 @@ struct menu_item_info {
 static NotifyNotification *notification = NULL;
 static gchar *last_events = NULL;
 
-static EggTrayIcon *tray_icon = NULL;
+static GtkStatusIcon *tray_icon = NULL;
 static gchar *current_server = NULL, *current_sink = NULL, *current_source = NULL;
 static struct menu_item_info *current_source_menu_item_info = NULL, *current_sink_menu_item_info = NULL, *current_server_menu_item_info = NULL;
 static GtkMenu *menu = NULL, *sink_submenu = NULL, *source_submenu = NULL, *server_submenu = NULL;
@@ -84,12 +86,12 @@ static gboolean find_predicate(const gchar* name, const struct menu_item_info *m
 static void look_for_current_menu_item(
         GHashTable *h,
         const char *device,
-        int look_for_device, 
-        struct menu_item_info **current_menu_item_info, 
+        int look_for_device,
+        struct menu_item_info **current_menu_item_info,
         GtkWidget *default_menu_item,
         GtkWidget *other_menu_item) {
 
-    struct menu_item_info *m; 
+    struct menu_item_info *m;
 
     if (!current_server || (look_for_device && !device))
         m = NULL;
@@ -97,7 +99,7 @@ static void look_for_current_menu_item(
              (strcmp(current_server, (*current_menu_item_info)->server) == 0 &&
               (!look_for_device || strcmp(device, (*current_menu_item_info)->device) == 0)))
         m = *current_menu_item_info;
-    else 
+    else
         /* Look for the right entry */
         m = g_hash_table_find(h, (GHRFunc) find_predicate, (gpointer) device);
 
@@ -128,20 +130,27 @@ static void look_for_current_menu_item(
 static void look_for_current_menu_items(void) {
     updating = 1;
     look_for_current_menu_item(server_hash_table, NULL, FALSE, &current_server_menu_item_info, default_server_menu_item, other_server_menu_item);
-    look_for_current_menu_item(sink_hash_table, current_sink, TRUE, &current_sink_menu_item_info, default_sink_menu_item, other_sink_menu_item); 
-    look_for_current_menu_item(source_hash_table, current_source, TRUE, &current_source_menu_item_info, default_source_menu_item, other_source_menu_item); 
+    look_for_current_menu_item(sink_hash_table, current_sink, TRUE, &current_sink_menu_item_info, default_sink_menu_item, other_sink_menu_item);
+    look_for_current_menu_item(source_hash_table, current_source, TRUE, &current_source_menu_item_info, default_source_menu_item, other_source_menu_item);
     updating = 0;
 }
 
 static void menu_item_info_free(struct menu_item_info *i) {
     if (i->menu_item)
         gtk_widget_destroy(i->menu_item);
-    
+
     g_free(i->name);
     g_free(i->server);
     g_free(i->device);
     g_free(i->description);
     g_free(i);
+
+    if (current_sink_menu_item_info == i)
+        current_sink_menu_item_info = NULL;
+    if (current_source_menu_item_info == i)
+        current_source_menu_item_info = NULL;
+    if (current_server_menu_item_info == i)
+        current_server_menu_item_info = NULL;
 }
 
 static void notification_closed(void) {
@@ -156,13 +165,13 @@ static void notify_event(const char *title, const char*text) {
 
     if (no_notify_on_startup && time(NULL)-startup_time <= 5)
         return;
-    
+
     if (!notify_is_initted())
         return;
-        
+
     if (!notification) {
         s = g_strdup_printf("<i>%s</i>\n%s", title, text);
-        notification = notify_notification_new(title, s, "audio-card", GTK_WIDGET(tray_icon));
+        notification = notify_notification_new(title, s, NULL);
         notify_notification_set_category(notification, "device.added");
         notify_notification_set_urgency(notification, NOTIFY_URGENCY_LOW);
         g_signal_connect_swapped(G_OBJECT(notification), "closed", G_CALLBACK(notification_closed), NULL);
@@ -170,7 +179,7 @@ static void notify_event(const char *title, const char*text) {
         s = g_strdup_printf("%s\n\n<i>%s</i>\n%s", last_events, title, text);
         notify_notification_update(notification, title, s, "audio-card");
     }
-    
+
     g_free(last_events);
     last_events = s;
 
@@ -185,9 +194,9 @@ static GtkWidget *append_radio_menu_item(GtkMenu *menu, const gchar *label, gboo
     else
         item = gtk_check_menu_item_new_with_label(label);
 
-    gtk_check_menu_item_set_draw_as_radio(GTK_CHECK_MENU_ITEM(item), TRUE); 
+    gtk_check_menu_item_set_draw_as_radio(GTK_CHECK_MENU_ITEM(item), TRUE);
     gtk_widget_show_all(item);
-    
+
     if (prepend)
         gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), item);
     else
@@ -213,7 +222,7 @@ static struct menu_item_info* add_menu_item_info(GHashTable *h, GtkMenu *menu, c
     gchar *c;
     const gchar *title;
     gboolean b;
-    
+
     m = g_new(struct menu_item_info, 1);
 
     m->name = g_strdup(i->name);
@@ -246,7 +255,7 @@ static struct menu_item_info* add_menu_item_info(GHashTable *h, GtkMenu *menu, c
                 i->description ? i->description : "n/a",
                 m->sample_spec_valid ? pa_sample_spec_snprint(t, sizeof(t), &m->sample_spec) : "n/a");
     }
-    
+
     gtk_tooltips_set_tip(GTK_TOOLTIPS(menu_tooltips), m->menu_item, c, NULL);
 
     if (menu == sink_submenu) {
@@ -262,10 +271,10 @@ static struct menu_item_info* add_menu_item_info(GHashTable *h, GtkMenu *menu, c
 
     if (b)
         notify_event(title, c);
-    
+
     g_free(c);
     g_hash_table_insert(h, m->name, m);
-    
+
     return m;
 }
 
@@ -277,7 +286,7 @@ static void remove_menu_item_info(GHashTable *h, const pa_browse_info *i) {
 
     if (!(m = g_hash_table_lookup(h, i->name)))
         return;
-    
+
     if (h == sink_hash_table) {
         title = "Networked Audio Sink Disappeared";
         b = notify_on_sink_discovery;
@@ -320,23 +329,23 @@ static void browse_cb(pa_browser *z, pa_browse_opcode_t c, const pa_browse_info 
         case PA_BROWSE_NEW_SERVER:
             add_menu_item_info(server_hash_table, server_submenu, i, (GCallback) server_change_cb);
             break;
-            
+
         case PA_BROWSE_NEW_SINK:
-                add_menu_item_info(sink_hash_table, sink_submenu, i, (GCallback) sink_change_cb);
+            add_menu_item_info(sink_hash_table, sink_submenu, i, (GCallback) sink_change_cb);
             break;
-            
+
         case PA_BROWSE_NEW_SOURCE:
             add_menu_item_info(source_hash_table, source_submenu, i, (GCallback) source_change_cb);
             break;
-            
+
         case PA_BROWSE_REMOVE_SERVER:
             remove_menu_item_info(server_hash_table, i);
             break;
-            
+
         case PA_BROWSE_REMOVE_SINK:
             remove_menu_item_info(sink_hash_table, i);
             break;
-            
+
         case PA_BROWSE_REMOVE_SOURCE:
             remove_menu_item_info(source_hash_table, i);
             break;
@@ -346,29 +355,56 @@ static void browse_cb(pa_browser *z, pa_browse_opcode_t c, const pa_browse_info 
     look_for_current_menu_items();
 }
 
-static void tray_icon_on_click(GtkWidget *widget, GdkEventButton* event) {
-    if (event->type == GDK_BUTTON_PRESS)
-        gtk_menu_popup(menu, NULL, NULL, NULL, NULL, event->button, event->time);
+static void tray_icon_on_click(GtkStatusIcon *status_icon, void * user_data) {
+    gtk_menu_popup(menu, NULL, NULL, gtk_status_icon_position_menu, status_icon, 0, gtk_get_current_event_time());
+}
+
+static void run(const char *name) {
+    GnomeDesktopItem* di;
+    char *p;
+
+    p = g_strdup_printf(DESKTOP_DIR "/%s.desktop", name);
+    di = gnome_desktop_item_new_from_file(p, GNOME_DESKTOP_ITEM_LOAD_ONLY_IF_EXISTS, NULL);
+
+    if (di) {
+        if (gnome_desktop_item_launch(di, NULL, 0, NULL)) {
+            gnome_desktop_item_unref(di);
+            g_free(p);
+            return;
+        }
+    }
+
+    g_message("Failed to launch desktop item '%s'.", di ? gnome_desktop_item_get_location(di) : p);
+
+    if (di)
+        gnome_desktop_item_unref(di);
+
+    g_free(p);
+
+    if (strcmp(name, "pavumeter-record") == 0)
+        g_spawn_command_line_async("pavumeter --record", NULL);
+    else
+        g_spawn_command_line_async(name, NULL);
 }
 
 static void start_manager_cb(void) {
-    g_spawn_command_line_async("paman", NULL);
+    run("paman");
 }
 
 static void start_vucontrol_cb(void) {
-    g_spawn_command_line_async("pavucontrol", NULL);
+    run("pavucontrol");
 }
 
 static void start_vumeter_playback_cb(void) {
-    g_spawn_command_line_async("pavumeter", NULL);
+    run("pavumeter");
 }
 
 static void start_vumeter_record_cb(void) {
-    g_spawn_command_line_async("pavumeter --record", NULL);
+    run("pavumeter-record");
 }
 
 static void start_server_preferences_cb(void) {
-    g_spawn_command_line_async("paprefs", NULL);
+    run("paprefs");
 }
 
 static void show_preferences(void) {
@@ -378,7 +414,7 @@ static void show_preferences(void) {
     eb = glade_xml_get_widget(glade_xml, "titleEventBox");
     gdk_color_white(gtk_widget_get_colormap(eb), &white);
     gtk_widget_modify_bg(eb, GTK_STATE_NORMAL, &white);
-    
+
     w = glade_xml_get_widget(glade_xml, "preferencesDialog");
     gtk_widget_show_all(w);
     gtk_window_present(GTK_WINDOW(w));
@@ -448,7 +484,7 @@ static void set_source(const char *server, const char *source) {
 static void set_server(const char *server) {
     if (updating)
         return;
-    
+
     if (!pstrequal(server, current_server))
         set_props(server, NULL, NULL);
 
@@ -477,7 +513,7 @@ static const gchar *input_dialog(const gchar *title, const gchar *text, const gc
         gtk_window_present(GTK_WINDOW(w));
         return value;
     }
-    
+
     gtk_window_set_title(GTK_WINDOW(w), title);
 
     entry = glade_xml_get_widget(glade_xml, "inputEntry");
@@ -501,7 +537,7 @@ static void sink_other_cb(void) {
 
     if (updating)
         return;
-    
+
     set_sink(NULL, input_dialog("Other Sink", "Please enter sink name:", current_sink));
 }
 
@@ -520,24 +556,16 @@ static void server_other_cb(void) {
     set_server(input_dialog("Other Server", "Please enter server name:", current_server));
 }
 
-static EggTrayIcon *create_tray_icon(void) {
-    GtkTooltips *tips;
-    EggTrayIcon *tray_icon;
-    GtkWidget *event_box, *icon;
+static GtkStatusIcon *create_tray_icon(void) {
+    GtkStatusIcon *tray_icon;
 
-    tray_icon = egg_tray_icon_new("PulseAudio Device Chooser");
+    tray_icon = gtk_status_icon_new();
 
-    event_box = gtk_event_box_new();
-    g_signal_connect_swapped(G_OBJECT(event_box), "button-press-event", G_CALLBACK(tray_icon_on_click), NULL);
-
-    gtk_container_add(GTK_CONTAINER(tray_icon), event_box);
-    icon = gtk_image_new_from_icon_name("audio-card", GTK_ICON_SIZE_SMALL_TOOLBAR);
-    gtk_container_add(GTK_CONTAINER(event_box), icon);
-    
-    gtk_widget_show_all(GTK_WIDGET(tray_icon));
-
-    tips = gtk_tooltips_new();
-    gtk_tooltips_set_tip(GTK_TOOLTIPS(tips), event_box, "PulseAudio Applet", "I don't know what this is.");
+    g_signal_connect_object(G_OBJECT(tray_icon), "activate", G_CALLBACK(tray_icon_on_click), tray_icon, 0);
+    g_signal_connect_object(G_OBJECT(tray_icon), "popup-menu", G_CALLBACK(tray_icon_on_click), tray_icon, 0);
+    gtk_status_icon_set_from_icon_name(tray_icon, "audio-card");
+    gtk_status_icon_set_tooltip(tray_icon, "PulseAudio Applet");
+    gtk_status_icon_set_visible(tray_icon, TRUE);
 
     return tray_icon;
 }
@@ -571,7 +599,7 @@ static void append_default_device_menu_items(GtkMenu *m, GtkWidget **empty_menu_
     gtk_widget_set_sensitive(*empty_menu_item, FALSE);
 
     gtk_menu_shell_append(GTK_MENU_SHELL(m), gtk_separator_menu_item_new());
-    
+
     *default_menu_item = append_radio_menu_item(m, "_Default", TRUE, FALSE);
     g_signal_connect_swapped(G_OBJECT(*default_menu_item), "activate", default_callback, NULL);
     *other_menu_item = append_radio_menu_item(m, "_Other...", TRUE, FALSE);
@@ -581,7 +609,7 @@ static void append_default_device_menu_items(GtkMenu *m, GtkWidget **empty_menu_
 static GtkMenu *create_menu(void) {
     GtkWidget *item;
     gchar *c;
-    
+
     menu = GTK_MENU(gtk_menu_new());
     menu_tooltips = gtk_tooltips_new();
 
@@ -597,12 +625,12 @@ static GtkMenu *create_menu(void) {
     append_submenu(menu, "Default S_ink", sink_submenu, "audio-card");
     append_submenu(menu, "Default S_ource", source_submenu, "audio-input-microphone");
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), gtk_separator_menu_item_new());
-    
+
     item = append_menuitem(menu, "_Manager...", NULL);
     gtk_widget_set_sensitive(item, !!(c = g_find_program_in_path("paman")));
     g_free(c);
     g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(start_manager_cb), NULL);
-    
+
     item = append_menuitem(menu, "_Volume Control...", "multimedia-volume-control");
     gtk_widget_set_sensitive(item, !!(c = g_find_program_in_path("pavucontrol")));
     g_free(c);
@@ -621,16 +649,16 @@ static GtkMenu *create_menu(void) {
     gtk_widget_set_sensitive(item, !!(c = g_find_program_in_path("paprefs")));
     g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(start_server_preferences_cb), NULL);
     g_free(c);
-    
+
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), gtk_separator_menu_item_new());
     item = append_menuitem(menu, "_Preferences...", "gtk-preferences");
     g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(show_preferences), NULL);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), gtk_separator_menu_item_new());
-    
+
     item = gtk_image_menu_item_new_from_stock(GTK_STOCK_QUIT, NULL);
     g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(gtk_main_quit), NULL);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-      
+
     gtk_widget_show_all(GTK_WIDGET(menu));
 
     return menu;
@@ -669,7 +697,7 @@ static void set_x11_props(void) {
      * properties have been altered. We delete this property here to
      * make sure that the module notices that it is no longer in
      * control */
-    x11_del_prop(GDK_DISPLAY(), "PULSE_ID"); 
+    x11_del_prop(GDK_DISPLAY(), "PULSE_ID");
 }
 
 static void start_on_login_cb(GtkCheckButton *w) {
@@ -680,7 +708,7 @@ static void start_on_login_cb(GtkCheckButton *w) {
     mkdir(c, 0777);
     g_free(c);
     c = g_build_filename(g_get_user_config_dir(), "autostart", "padevchooser.desktop", NULL);
-    
+
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w))) {
         if (symlink(DESKTOP_FILE, c) < 0 && errno != EEXIST)
             g_warning("symlink() failed: %s", strerror(errno));
@@ -706,7 +734,7 @@ static void check_button_cb(GtkCheckButton *w, const gchar *key) {
 
     ptr = g_object_get_data(G_OBJECT(w), "ptr");
     b = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w));
-    
+
     if (*ptr == b)
         return;
 
@@ -720,7 +748,7 @@ static void gconf_notify_cb(GConfClient *client, guint cnxn_id, GConfEntry *entr
     gboolean b;
 
     b = gconf_value_get_bool(gconf_entry_get_value(entry));
-    
+
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(userdata)) != b)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(userdata), b);
 
@@ -745,7 +773,7 @@ static void setup_gconf(void) {
     g_object_set_data(G_OBJECT(sink_check_button), "ptr", &notify_on_sink_discovery);
     g_object_set_data(G_OBJECT(source_check_button), "ptr", &notify_on_source_discovery);
     g_object_set_data(G_OBJECT(startup_check_button), "ptr", &no_notify_on_startup);
-    
+
     notify_on_server_discovery = gconf_client_get_bool(gconf, GCONF_PREFIX"/notify_on_server_discovery", NULL);
     notify_on_sink_discovery = gconf_client_get_bool(gconf, GCONF_PREFIX"/notify_on_sink_discovery", NULL);
     notify_on_source_discovery = gconf_client_get_bool(gconf, GCONF_PREFIX"/notify_on_source_discovery", NULL);
@@ -758,7 +786,7 @@ static void setup_gconf(void) {
     init_start_on_login_check_button(GTK_TOGGLE_BUTTON(start_on_login_check_button));
 
     gtk_widget_set_sensitive(startup_check_button, notify_on_server_discovery||notify_on_sink_discovery||notify_on_source_discovery);
-    
+
     gconf_client_notify_add(gconf, GCONF_PREFIX"/notify_on_server_discovery", gconf_notify_cb, server_check_button, NULL, NULL);
     gconf_client_notify_add(gconf, GCONF_PREFIX"/notify_on_sink_discovery", gconf_notify_cb, sink_check_button, NULL, NULL);
     gconf_client_notify_add(gconf, GCONF_PREFIX"/notify_on_source_discovery", gconf_notify_cb, source_check_button, NULL, NULL);
@@ -774,10 +802,14 @@ static void setup_gconf(void) {
 int main(int argc, char *argv[]) {
     pa_browser *b = NULL;
     pa_glib_mainloop *m = NULL;
+    GnomeProgram *program;
 
     startup_time = time(NULL);
-    
-    gtk_init(&argc, &argv);
+
+    program = gnome_program_init("padevchoose", VERSION,
+                                 LIBGNOMEUI_MODULE,
+                                 argc, argv,
+                                 NULL);
 
     glade_xml = glade_xml_new(GLADE_FILE, NULL, NULL);
     g_assert(glade_xml);
@@ -797,16 +829,25 @@ int main(int argc, char *argv[]) {
     notify_init("PulseAudio Applet");
 
     get_x11_props();
-    
+
     if (!(b = pa_browser_new(pa_glib_mainloop_get_api(m)))) {
-        g_warning("pa_browser_new() failed.");
+        GtkWidget *dialog;
+
+        dialog = gtk_message_dialog_new(NULL,
+                                        GTK_DIALOG_MODAL,
+                                        GTK_MESSAGE_ERROR,
+                                        GTK_BUTTONS_CLOSE,
+                                        "The Avahi Zeroconf service is not running. Please make sure that Avahi is installed and activated before starting the PulseAudio Device Chooser.");
+        gtk_window_set_title(GTK_WINDOW(dialog), "Error");
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
         goto fail;
     }
 
     pa_browser_set_callback(b, browse_cb, NULL);
 
     tray_icon = create_tray_icon();
-    
+
     gtk_main();
 
 fail:
@@ -827,6 +868,9 @@ fail:
         g_object_unref(G_OBJECT(notification));
 
     g_free(last_events);
-    
+
+    if (program)
+        g_object_unref(program);
+
     return 0;
 }

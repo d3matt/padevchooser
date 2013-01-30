@@ -1,7 +1,7 @@
 # -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-# $Id: configure.ac 22 2006-08-26 21:42:42Z lennart $
+# $Id$
 
 # This file is part of padevchooser.
 #
@@ -20,7 +20,7 @@
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
 AC_PREREQ(2.57)
-AC_INIT([padevchooser],[0.9.3],[mzcnqripubbfre (at) 0pointer (dot) de])
+AC_INIT([padevchooser],[0.9.4],[mzcnqripubbfre (at) 0pointer (dot) de])
 AC_CONFIG_SRCDIR([src/padevchooser.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([foreign 1.9 -Wall])
@@ -39,16 +39,16 @@ AC_PROG_LN_S
 AC_TYPE_SIGNAL
 AC_HEADER_STDC
 
-PKG_CHECK_MODULES(GUILIBS, [ gtk+-2.0 libnotify libglade-2.0 gconf-2.0 ])
+PKG_CHECK_MODULES(GUILIBS, [ gtk+-2.0 >= 2.10 libnotify libglade-2.0 gconf-2.0 libgnomeui-2.0 gnome-desktop-2.0])
 AC_SUBST(GUILIBS_CFLAGS)
 AC_SUBST(GUILIBS_LIBS)
 
 if test -d ../pulseaudio ; then
    PULSE_CFLAGS='-I$(top_srcdir)/../pulseaudio/src'
-   PULSE_LIBS='-L$(top_srcdir)/../pulseaudio/src/.libs -lpulse -lpulse-mainloop-glib -lpulse-browse'
+   PULSE_LIBS='-L$(top_srcdir)/../pulseaudio/src/.libs -lpulse -lpulse-mainloop-glib'
    echo "*** Found pulseaudio in ../pulseaudio, using that version ***"
 else
-   PKG_CHECK_MODULES(PULSE, [ libpulse >= 0.9.2 libpulse-browse >= 0.9.2 libpulse-mainloop-glib >= 0.9.2 ])
+   PKG_CHECK_MODULES(PULSE, [ libpulse >= 0.9.2 libpulse-mainloop-glib >= 0.9.2 ])
 fi
 
 AC_SUBST(PULSE_LIBS)

@@ -1,7 +1,7 @@
 #ifndef foox11prophfoo
 #define foox11prophfoo
 
-/* $Id: x11prop.h 4 2006-06-21 00:03:25Z lennart $ */
+/* $Id$ */
 
 /***
   This file is part of pulseaudio.
