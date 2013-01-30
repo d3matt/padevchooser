@@ -29,7 +29,6 @@ if type -p stow > /dev/null && test -d /usr/local/stow ; then
 fi
 
 # Checks for programs.
-AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_LN_S
 AC_HEADER_STDC
@@ -52,11 +51,9 @@ PKG_CHECK_MODULES(AVAHI, [avahi-client])
 # If using GCC specifiy some additional parameters
 if test "x$GCC" = "xyes" ; then
    AM_CFLAGS="-pipe -Wall -W -Wno-unused-parameter"
-   AM_CXXFLAGS="$CXXFLAGS -pipe -Wall -W"
 fi
 
 AC_SUBST(AM_CFLAGS)
-AC_SUBST(AM_CXXFLAGS)
 
 # LYNX documentation generation
 AC_ARG_ENABLE(lynx,
