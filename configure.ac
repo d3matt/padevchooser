@@ -18,12 +18,10 @@
 # Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 
 AC_PREREQ([2.69])
-AC_INIT([padevchooser],[0.9.4],[mzcnqripubbfre (at) 0pointer (dot) de])
+AC_INIT([padevchooser],[0.9.4],[mzcnqripubbfre (at) 0pointer (dot) de],,[http://0pointer.de/lennart/projects/padevchooser/])
 AC_CONFIG_SRCDIR([src/padevchooser.c])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([foreign 1.9 -Wall])
-
-AC_SUBST(PACKAGE_URL, [http://0pointer.de/lennart/projects/padevchooser/])
 
 if type -p stow > /dev/null && test -d /usr/local/stow ; then
    AC_MSG_NOTICE([*** Found /usr/local/stow: default install prefix set to /usr/local/stow/${PACKAGE_NAME}-${PACKAGE_VERSION} ***])
