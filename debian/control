@@ -20,7 +20,7 @@ Description: PulseAudio Device Chooser
  WIN32 systems. It is a drop in replacement for the ESD sound server with
  much better latency, mixing/re-sampling quality and overall architecture.
  .
- This is a simple GTK tool which registers an icon in the tray area and
+ This is a simple Gtk tool which registers an icon in the tray area and
  allows quick access to some features of the PulseAudio sound server.
  Specifically it can do for you:
  .
