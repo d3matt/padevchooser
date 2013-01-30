@@ -29,4 +29,4 @@ AM_CPPFLAGS+=-DGLADE_FILE=\"$(pkgdatadir)/padevchooser.glade\"
 AM_CPPFLAGS+=-DDESKTOP_FILE=\"$(desktopdir)/padevchooser.desktop\" 
 AM_CPPFLAGS+=-DDESKTOP_DIR=\"$(desktopdir)\"
 
-padevchooser_LDADD=$(GUILIBS_LIBS) $(PULSE_LIBS) $(AVAHI_LIBS)
+AM_LDFLAGS=$(GUILIBS_LIBS) $(PULSE_LIBS) $(AVAHI_LIBS)
