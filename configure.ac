@@ -1,8 +1,6 @@
 # -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-# $Id$
-
 # This file is part of padevchooser.
 #
 # padevchooser is free software; you can redistribute it and/or modify it
