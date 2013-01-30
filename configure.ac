@@ -51,9 +51,12 @@ PKG_CHECK_MODULES(AVAHI, [avahi-client])
 
 # If using GCC specifiy some additional parameters
 if test "x$GCC" = "xyes" ; then
-   CFLAGS="$CFLAGS -pipe -Wall -W -Wno-unused-parameter"
-   CXXFLAGS="$CXXFLAGS -pipe -Wall -W"
+   AM_CFLAGS="-pipe -Wall -W -Wno-unused-parameter"
+   AM_CXXFLAGS="$CXXFLAGS -pipe -Wall -W"
 fi
+
+AC_SUBST(AM_CFLAGS)
+AC_SUBST(AM_CXXFLAGS)
 
 # LYNX documentation generation
 AC_ARG_ENABLE(lynx,
