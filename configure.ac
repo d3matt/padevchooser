@@ -52,6 +52,10 @@ fi
 AC_SUBST(PULSE_LIBS)
 AC_SUBST(PULSE_CFLAGS)
 
+PKG_CHECK_MODULES(AVAHI, [avahi-client])
+AC_SUBST(AVAHI_LIBS)
+AC_SUBST(AVAHI_CFLAGS)
+
 # If using GCC specifiy some additional parameters
 if test "x$GCC" = "xyes" ; then
    CFLAGS="$CFLAGS -pipe -Wall -W -Wno-unused-parameter"
