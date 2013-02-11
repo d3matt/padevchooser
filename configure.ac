@@ -48,6 +48,11 @@ fi
 
 PKG_CHECK_MODULES(AVAHI, [avahi-client])
 
+LIBS="${GUILIBS_LIBS} ${PULSE_LIBS} ${AVAHI_LIBS} ${LIBS}"
+
+AM_CPPFLAGS="${GUILIBS_CFLAGS} ${PULSE_CFLAGS} ${AVAHI_CFLAGS}"
+AC_SUBST(AM_CPPFLAGS)
+
 # If using GCC specifiy some additional parameters
 if test "x$GCC" = "xyes" ; then
    AM_CFLAGS="-pipe -Wall -W -Wno-unused-parameter"

@@ -24,9 +24,6 @@ dist_desktop_DATA=padevchooser.desktop
 
 padevchooser_SOURCES=padevchooser.c x11prop.c x11prop.h browser.h browser.c stubs.c pulsecore/avahi-wrap.c
 
-AM_CPPFLAGS=$(GUILIBS_CFLAGS) $(PULSE_CFLAGS) $(AVAHI_CFLAGS)
 AM_CPPFLAGS+=-DGLADE_FILE=\"$(pkgdatadir)/padevchooser.glade\" 
 AM_CPPFLAGS+=-DDESKTOP_FILE=\"$(desktopdir)/padevchooser.desktop\" 
 AM_CPPFLAGS+=-DDESKTOP_DIR=\"$(desktopdir)\"
-
-AM_LDFLAGS=$(GUILIBS_LIBS) $(PULSE_LIBS) $(AVAHI_LIBS)
