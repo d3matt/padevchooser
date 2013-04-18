@@ -1,3 +1,9 @@
+padevchooser (0.9.4-2) unstable; urgency=low
+
+  * Add build dependency on libatomic-ops-dev (closes: #705684)
+
+ -- Barak A. Pearlmutter <bap@debian.org>  Thu, 18 Apr 2013 16:03:32 +0100
+
 padevchooser (0.9.4-1) unstable; urgency=low
 
   * New upstream version
