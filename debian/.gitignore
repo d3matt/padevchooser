@@ -1,8 +1,0 @@
-/*.debhelper
-/*.debhelper.log
-/*.substvars
-/autoreconf.after
-/autoreconf.before
-/files
-/padevchooser.1
-/padevchooser/
