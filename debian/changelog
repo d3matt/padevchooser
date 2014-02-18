@@ -1,8 +1,15 @@
-padevchooser (0.9.4-2) unstable; urgency=low
+padevchooser (0.9.4-2) unstable; urgency=medium
 
-  * Add build dependency on libatomic-ops-dev (closes: #705684)
+  * Merge NMU.
 
  -- Barak A. Pearlmutter <bap@debian.org>  Thu, 18 Apr 2013 16:03:32 +0100
+
+padevchooser (0.9.4-1.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * debian/control: Add libatomic-ops-dev to Build-Depends. (Closes: #705684)
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Sat, 18 May 2013 11:43:08 +0200
 
 padevchooser (0.9.4-1) unstable; urgency=low
 
