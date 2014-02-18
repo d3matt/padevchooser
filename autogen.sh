@@ -18,6 +18,4 @@
 
 # Only there to make jhbuild happy
 
-NOCONFIGURE=1 ./bootstrap.sh
-
-exec ./configure  "$@"
+autoreconf --install && exec ./configure "$@"

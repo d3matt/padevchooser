@@ -21,7 +21,7 @@ AC_PREREQ([2.69])
 AC_INIT([padevchooser],[0.9.4],[mzcnqripubbfre (at) 0pointer (dot) de],,[http://0pointer.de/lennart/projects/padevchooser/])
 AC_CONFIG_SRCDIR([src/padevchooser.c])
 AC_CONFIG_HEADERS([config.h])
-AM_INIT_AUTOMAKE([foreign 1.9 -Wall])
+AM_INIT_AUTOMAKE([foreign 1.9 subdir-objects -Wall])
 
 if type -p stow > /dev/null && test -d /usr/local/stow ; then
    AC_MSG_NOTICE([*** Found /usr/local/stow: default install prefix set to /usr/local/stow/${PACKAGE_NAME}-${PACKAGE_VERSION} ***])
