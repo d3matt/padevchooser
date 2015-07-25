@@ -1,5 +1,7 @@
 #!/usr/bin/make -f
 
+export CFLAGS = -std=gnu89
+
 %:
 	dh $@ --with autoreconf --parallel
 
