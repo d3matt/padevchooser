@@ -1,8 +1,10 @@
 padevchooser (0.9.4-2) unstable; urgency=medium
 
-  * Merge NMU.
+  * Merge NMUs.
+  * Merge misc upstream yak shaving.
+  * Bump standards version, no changes required.
 
- -- Barak A. Pearlmutter <bap@debian.org>  Thu, 18 Apr 2013 16:03:32 +0100
+ -- Barak A. Pearlmutter <bap@debian.org>  Sat, 25 Jul 2015 09:45:08 +0200
 
 padevchooser (0.9.4-1.2) unstable; urgency=medium
 
